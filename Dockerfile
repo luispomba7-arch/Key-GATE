@@ -1,6 +1,7 @@
 # ── Build frontend ──
 FROM oven/bun:1 AS frontend
 WORKDIR /app/web
+# Force rebuild
 COPY web/package.json web/bun.lock* ./
 RUN bun install --frozen-lockfile
 COPY web/ .
@@ -25,6 +26,7 @@ RUN CGO_ENABLED=0 go build -trimpath \
     -o /keygate ./cmd/server
 
 # ── Runtime ──
+# v2 - force redeploy
 FROM alpine:3.21
 RUN apk add --no-cache ca-certificates tzdata curl
 WORKDIR /app
