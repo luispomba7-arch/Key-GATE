@@ -122,7 +122,7 @@ func (h *AuthHandler) OTPVerify(c *gin.Context) {
 	}
 
 	// Auto-promote if email is in ADMIN_EMAILS
-	if h.Config.IsAdminEmail(user.Email) && user.Role == model.RoleUser {
+	if h.Config.IsAdminEmail(user.Email) && (user.Role == model.RoleUser || user.Role == "") {
 		_ = h.Store.SetUserRole(c, user.ID, model.RoleAdmin)
 		user.Role = model.RoleAdmin
 	}

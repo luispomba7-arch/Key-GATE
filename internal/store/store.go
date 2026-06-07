@@ -206,7 +206,7 @@ func (s *Store) UpsertUser(ctx context.Context, u *model.User) error {
 	}
 	_, err := s.DB.NewInsert().Model(u).
 		On("CONFLICT (email) DO UPDATE").
-		Set("name = EXCLUDED.name, avatar_url = EXCLUDED.avatar_url, updated_at = now()").
+		Set("name = EXCLUDED.name, avatar_url = EXCLUDED.avatar_url, role = COALESCE(NULLIF(EXCLUDED.role, ''), 'user'), updated_at = now()").
 		Exec(ctx)
 	return err
 }
